@@ -62,12 +62,42 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform: rotate(90deg);
+      transform-origin: right;
+      /* transition-timing-function: ease-in-out; */
+      transition: all 0.1s;
     }
 
   </style>
 
   <script>
 
+    const secondHand = document.querySelector(".second-hand");
+    const minHand = document.querySelector(".min-hand");
+    const hourHand = document.querySelector(".hour-hand");
+    const hand = document.querySelector(".hand");
+
+    function getTime() {
+      const date = new Date();
+      const seconds = (date.getSeconds() * 6 + 90);
+      const minutes = (date.getMinutes() * 6 + 90);
+      const hours = (date.getHours() * 30 + 90);
+      console.log(hours, minutes, seconds);
+
+      // this if should help smoothen the reset of seconds but it doesn't work yet
+      if (seconds === 444) {
+        hand.style.transition = "";
+      }
+
+      secondHand.style.transform = `rotate(${seconds}deg)`
+      minHand.style.transform = `rotate(${minutes}deg)`
+      hourHand.style.transform = `rotate(${hours}deg)`
+
+      if (seconds === 444) {
+        hand.style.transition = "all 0.1s";
+      }
+    }
+    setInterval("getTime()", 1000);
 
   </script>
 </body>
