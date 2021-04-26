@@ -84,10 +84,33 @@
     // 7. sort Exercise
     // Sort the people alphabetically by last name
 
+    // bastarte : I think he means "first name" else it's a one-liner
+    // console.log(people.sort());
+
+    people.sort((person1, person2) => {
+      [last1, first1] = person1.split(", ");
+      [last2, first2] = person2.split(", ");
+
+      // console.log(first1, first2);
+      return first1 > first2 ? 1 : -1 ;
+    });
+    console.log(7, people);
+
+
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
 
+    const itemCount = data.reduce(function(list, item) {
+      console.log(list, item);
+      if (!list[item]) {
+        list[item] = 0;
+      }
+      list[item]++;
+      return list;
+    }, {});
+
+    console.log(8, itemCount);
   </script>
 </body>
 </html>
