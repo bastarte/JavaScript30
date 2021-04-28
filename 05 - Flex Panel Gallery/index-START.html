@@ -127,14 +127,23 @@
 
     function activatePanel() {
       if (event.propertyName.includes('flex')) {
-        console.log(this.classList);
-        this.classList.toggle("open-active");
-        console.log(this.classList);
+        if (Array.from(this.classList).includes("open")) {
+          this.classList.toggle("open-active");
+          console.log(event.type);
+        }
+      }
+    }
+    function deactivatePanel() {
+      if (event.propertyName.includes('flex')) {
+        if (!Array.from(this.classList).includes("open")) {
+          this.classList.toggle("open-active");
+        }
       }
     }
 
     panels.forEach(panel => panel.addEventListener("click", openPanel));
     panels.forEach(panel => panel.addEventListener("transitionend", activatePanel));
+    panels.forEach(panel => panel.addEventListener("transitionstart", deactivatePanel));
   </script>
 
 
