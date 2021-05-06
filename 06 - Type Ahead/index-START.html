@@ -51,10 +51,15 @@
       // const propositions = matchPlaces(this.value, cities);
       console.log(this.value);
       console.log(propositions);
+
       const content = propositions.map(location => {
+
+        const regex = new RegExp(this.value, "gi")
+        const hlCity = location.city.replace(regex, `<span class="hl">${this.value}</span>`)
+        const hlState = location.state.replace(regex, `<span class="hl">${this.value}</span>`)
         return `
           <li>
-            <span class="name">${location.city}, ${location.state}</span>
+            <span class="name">${hlCity}, ${hlState}</span>
             <span class="population">${location.population}</span>
           </li>
         `;
