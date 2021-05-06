@@ -25,6 +25,48 @@
       .then(blob => blob.json())
       .then(data => cities.push(...data));
     console.log(cities);
+
+    // I can't understand why this code won't work if I test with console.log
+    // but it will work if it run it in the console.
+    // If someone reads this, please explain it to me ;)
+      // function matchPlaces(wordTyped, citiz) {
+      //   const regex = new RegExp(wordTyped, 'gi');
+      //   console.log(regex);
+      //   const filtered = citiz.filter(place => {
+      //     return place.city.match(regex);
+      //   });
+      //   return filtered;
+      // }
+      // console.log(matchPlaces("bos", cities));
+
+    function findMatches(search, cities) {
+      return cities.filter(location => {
+        const regex = new RegExp(search, 'gi');
+        return location.city.match(regex) || location.state.match(regex)
+      });
+    }
+
+    function displayResults() {
+      const propositions = findMatches(this.value, cities);
+      // const propositions = matchPlaces(this.value, cities);
+      console.log(this.value);
+      console.log(propositions);
+      const content = propositions.map(location => {
+        return `
+          <li>
+            <span class="name">${location.city}, ${location.state}</span>
+            <span class="population">${location.population}</span>
+          </li>
+        `;
+      });
+      suggestions.innerHTML = content.join("");
+    }
+
+    const searchbox = document.querySelector('.search');
+    const suggestions = document.querySelector('.suggestions');
+
+    // searchbox.addEventListener('change', displayResults); // Redundant with keyup
+    searchbox.addEventListener('keyup', displayResults);
   </script>
 </body>
 
