@@ -12,53 +12,84 @@
 
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
-  // ctx.fillStyle = '#3893ee';
-  ctx.strokeStyle = '#3893ee';
-  ctx.lineWidth = 100;
+  let lineWidth = 100;
+  ctx.lineWidth = sinLine(lineWidth); // good stuff
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
+  hue = 0;
 
   let isDrawing = false;
-  let lastX = 0;
-  let lastY = 0;
+
+  function degrees_to_radians(degrees) {
+    var pi = Math.PI;
+    return (degrees / 180) * pi;
+  }
+
+  // sinus function has the exact increase/decrease behaviour we want
+  // so it's more elegant than ++ then -- with ifs and all
+  // https://fr.wikipedia.org/wiki/Sinus_(math%C3%A9matiques)
+  function sinLine(width) {
+    let rad = degrees_to_radians(width);
+    let lineWidth = ((Math.sin(rad * 4) + 1) / 2) * 100;
+    return lineWidth;
+  }
 
   function draw(event) {
     if (!isDrawing) return;
-    console.log(event);
 
-    lastX = event.offsetX;
-    lastY = event.offsetY;
-    console.log(clickX, clickY);
-    console.log(lastX, lastY);
+    // init drawing
+    ctx.strokeStyle = `hsl(${hue % 360}, 100%, 50%)`
 
+    // draw
     ctx.beginPath();
     ctx.moveTo(clickX, clickY);
     ctx.lineTo(event.offsetX, event.offsetY);
     ctx.stroke();
+    hue++;
+    lineWidth++;
+    ctx.lineWidth = sinLine(lineWidth);
 
+    // store the position at the end of the draw so that the next lines starts from here
     clickX = event.offsetX;
     clickY = event.offsetY;
   }
 
+  function drawPoint() {
+    console.log("point");
+    ctx.strokeStyle = '#3893ee';
+    ctx.beginPath();
+    ctx.arc(clickX, clickY, sinLine(lineWidth) / 2, 0, 2 * Math.PI, true);
+    ctx.fillStyle = `hsl(${hue % 360}, 100%, 50%)`;
+    ctx.fill();
+  }
+
+  function clearCanvas() {
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    console.log("clear", canvas.height, canvas.width);
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    // clearRect resets all settings so we need to fix them back
+    ctx.lineWidth = 100;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    hue = 0;
+
+    let isDrawing = false;
+    let clickX = 0;
+    let clickY = 0;
+  }
+
+  document.addEventListener('dblclick', clearCanvas);
   document.addEventListener('mousedown', event => {
     clickX = event.clientX;
     clickY = event.clientY;
-    // console.log(clickX, clickY);
-    isDrawing = true
-    // drawPoint();
+    isDrawing = true;
+    drawPoint();
   })
-
   document.addEventListener('mousemove', event => draw(event));
-
-  window.addEventListener('mouseup', () => {
-    isDrawing = false
-  })
-
-  window.addEventListener('mouseout', () => {
-    isDrawing = false
-  })
-
-
+  document.addEventListener('mouseup', () => { isDrawing = false; })
+  window.addEventListener('mouseout', () => { isDrawing = false; })
 </script>
 
 <style>
