@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Hold Shift to Check Multiple Checkboxes</title>
 </head>
+
 <body>
   <style>
-
     html {
       font-family: sans-serif;
       background: #ffc600;
@@ -17,7 +18,7 @@
       margin: 50px auto;
       background: white;
       border-radius: 5px;
-      box-shadow: 10px 10px 0 rgba(0,0,0,0.1);
+      box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
     }
 
     .item {
@@ -30,7 +31,7 @@
       border-bottom: 0;
     }
 
-    input:checked + p {
+    input:checked+p {
       background: #F9F9F9;
       text-decoration: line-through;
     }
@@ -44,13 +45,13 @@
       padding: 20px;
       transition: background 0.2s;
       flex: 1;
-      font-family:'helvetica neue';
+      font-family: 'helvetica neue';
       font-size: 20px;
       font-weight: 200;
       border-left: 1px solid #D1E2FF;
     }
   </style>
-   <!--
+  <!--
    The following is a common layout you would see in an email client.
 
    When a user clicks a checkbox, holds Shift, and then clicks another checkbox a few rows down, all the checkboxes inbetween those two checkboxes should be checked.
@@ -95,7 +96,59 @@
     </div>
   </div>
 
-<script>
-</script>
+  <script>
+  // Wes Bos solution is much simpler
+  // however he doesn't cover unchecking
+  // but OK his is better and more beautiful.
+
+    isShift = false ;
+    lastIndex = 0 ;
+
+    function checkAll() {
+      if (thisIndex > lastIndex ) {
+        boxList = Array.from(parentInbox.children).slice(lastIndex, thisIndex + 1);
+      } else {
+        boxList = Array.from(parentInbox.children).slice(thisIndex, lastIndex + 1);
+      }
+      const targetStatus = boxList[0].firstElementChild.checked;
+      boxList.forEach(box => {
+        box.firstElementChild.checked = targetStatus;
+      })
+    }
+
+    function getClickIndex() {
+      parentDiv = this.parentNode;
+      parentInbox = parentDiv.parentNode;
+      if (isShift) {
+        thisIndex = Array.from(parentInbox.children).indexOf(parentDiv);
+        checkAll();
+
+      } else if (this.checked) {
+        lastIndex = Array.from(parentInbox.children).indexOf(parentDiv);
+      }
+    }
+
+    const chkbox = document.querySelectorAll(".item input");
+
+    chkbox.forEach(box => {
+      box.addEventListener("click", getClickIndex);
+    });
+
+    document.addEventListener("keydown", event => {
+        isShift = (event.key === "Shift");
+        // console.log(isShift);
+    });
+
+    document.addEventListener("keyup", event => {
+        isShift = false ;
+        // console.log(isShift);
+    });
+
+
+
+
+
+  </script>
 </body>
+
 </html>
