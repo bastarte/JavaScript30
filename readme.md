@@ -13,7 +13,7 @@ A clock deigned in CSS and animated in JS
 ## 03 - CSS variables
 A demo of the use of CSS variables to make a dynamic control panel
 
-![Changing controle panel values and effect on an image](./images/03-CSSVariables.gif)
+![Changing control panel values and effect on an image](./images/03-CSSVariables3.gif)
 
 ## 05 - Flex panel gallery
 Animate image panels and text on click in and click out. I changed the click-out animation so that it is exactly reverse of click-in
